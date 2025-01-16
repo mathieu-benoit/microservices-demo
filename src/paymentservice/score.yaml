@@ -1,0 +1,21 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: paymentservice
+containers:
+  paymentservice:
+    image: .
+    variables:
+      DISABLE_PROFILER: "1"
+      PORT: "50051"
+    resources:
+      limits:
+        memory: "50Mi"
+        cpu: "30m"
+      requests:
+        memory: "30Mi"
+        cpu: "10m"
+service:
+  ports:
+    grpc:
+      port: 50051
+      targetPort: 50051
