@@ -1,0 +1,23 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: cartservice
+containers:
+  cartservice:
+    image: us-central1-docker.pkg.dev/google-samples/microservices-demo/cartservice:v0.10.2
+    variables:
+      REDIS_ADDR: "${resources.redis-cart.host}:${resources.redis-cart.port},user=${resources.redis-cart.username},password=${resources.redis-cart.password}"
+    resources:
+      limits:
+        memory: "90Mi"
+        cpu: "220m"
+      requests:
+        memory: "70Mi"
+        cpu: "200m"
+resources:
+  redis-cart:
+    type: redis
+service:
+  ports:
+    grpc:
+      port: 7070
+      targetPort: 7070
