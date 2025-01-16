@@ -30,9 +30,19 @@ jobs:
           score-compose generate src/cartservice/score.yaml --build='cartservice={"context":"src/cartservice/src/"}'
           score-compose generate src/checkoutservice/score.yaml --build='checkoutservice={"context":"src/checkoutservice/"}'
           score-compose generate src/emailservice/score.yaml --build='emailservice={"context":"src/emailservice/"}'
+          score-compose generate src/currencyservice/score.yaml --build='currencyservice={"context":"src/currencyservice/"}'
+          score-compose generate src/frontend/score.yaml --build='frontend={"context":"src/frontend/"}'
+          score-compose generate src/loadgenerator/score.yaml --build='loadgenerator={"context":"src/loadgenerator/"}'
+          score-compose generate src/paymentservice/score.yaml --build='paymentservice={"context":"src/paymentservice/"}'
+          score-compose generate src/productcatalogservice/score.yaml --build='productcatalogservice={"context":"src/productcatalogservice/"}'
+          score-compose generate src/recommendationservice/score.yaml --build='recommendationservice={"context":"src/recommendationservice/"}'
+          score-compose generate src/shippingservice/score.yaml --build='shippingservice={"context":"src/shippingservice/"}'
       - name: docker compose up
         run: |
           docker compose up --build -d --remove-orphans
       - name: docker ps
         run: |
           docker ps
+      - name: curl frontend
+        run: |
+          curl $(score-compose resources get-outputs dns.default#frontend.dns --format '{{ .host }}:8080')
