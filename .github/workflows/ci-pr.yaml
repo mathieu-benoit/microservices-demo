@@ -26,10 +26,12 @@ jobs:
           score-compose init --no-sample
       - name: score-compose generate
         run: |
-          score-compose generate src/emailservice/score.yaml --build='emailservice={"context":"src/emailservice/"}' --output compose.emailservice.yaml
-          score-compose generate src/cartservice/score.yaml --build='cartservice={"context":"src/cartservice/src/"}' --output compose.cartservice.yaml
+          score-compose generate src/adservice/score.yaml --build='adservice={"context":"src/adservice/"}'
+          score-compose generate src/cartservice/score.yaml --build='cartservice={"context":"src/cartservice/src/"}'
+          score-compose generate src/emailservice/score.yaml --build='emailservice={"context":"src/emailservice/"}'
       - name: docker compose up
         run: |
-          export COMPOSE_PATH_SEPARATOR=:
-          export COMPOSE_FILE=compose.emailservice.yaml:compose.cartservice.yaml
           docker compose up --build -d --remove-orphans
+      - name: docker ps
+        run: |
+          docker ps
