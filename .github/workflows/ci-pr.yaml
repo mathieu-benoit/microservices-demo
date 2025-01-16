@@ -23,11 +23,12 @@ jobs:
           version: ${{ env.SCORE_COMPOSE_VERSION }}
       - name: score-compose init
         run: |
-          score-compose init --no-sample
+          score-compose init --no-sample --provisioners https://raw.githubusercontent.com/score-spec/community-provisioners/refs/heads/main/score-compose/00-service.provisioners.yaml
       - name: score-compose generate
         run: |
           score-compose generate src/adservice/score.yaml --build='adservice={"context":"src/adservice/"}'
           score-compose generate src/cartservice/score.yaml --build='cartservice={"context":"src/cartservice/src/"}'
+          score-compose generate src/checkoutservice/score.yaml --build='checkoutservice={"context":"src/checkoutservice/"}'
           score-compose generate src/emailservice/score.yaml --build='emailservice={"context":"src/emailservice/"}'
       - name: docker compose up
         run: |
