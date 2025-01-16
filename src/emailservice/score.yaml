@@ -1,0 +1,21 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: emailservice
+containers:
+  emailservice:
+    image: .
+    variables:
+      DISABLE_PROFILER: "1"
+      PORT: "8080"
+    resources:
+      limits:
+        memory: "70Mi"
+        cpu: "130m"
+      requests:
+        memory: "50Mi"
+        cpu: "110m"
+service:
+  ports:
+    grpc:
+      port: 5000
+      targetPort: 8080
