@@ -1,0 +1,27 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: shoppingassistantservice
+containers:
+  shoppingassistantservice:
+    image: .
+    variables:
+      GOOGLE_API_KEY: "GOOGLE_API_KEY_VAL"
+      ALLOYDB_CLUSTER_NAME: "ALLOYDB_CLUSTER_NAME_VAL"
+      ALLOYDB_INSTANCE_NAME: "ALLOYDB_INSTANCE_NAME_VAL"
+      ALLOYDB_DATABASE_NAME: "ALLOYDB_DATABASE_NAME_VAL"
+      ALLOYDB_TABLE_NAME: "ALLOYDB_TABLE_NAME_VAL"
+      ALLOYDB_SECRET_NAME: "ALLOYDB_SECRET_NAME_VAL"
+      PROJECT_ID: "PROJECT_ID_VAL"
+      REGION: "REGION_VAL"
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "64Mi"
+      limits:
+        cpu: "200m"
+        memory: "128Mi"
+service:
+  ports:
+    http:
+      port: 8080
+      targetPort: 8080

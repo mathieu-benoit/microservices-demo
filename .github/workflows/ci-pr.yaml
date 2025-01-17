@@ -37,12 +37,15 @@ jobs:
           score-compose generate src/productcatalogservice/score.yaml --build='productcatalogservice={"context":"src/productcatalogservice/"}'
           score-compose generate src/recommendationservice/score.yaml --build='recommendationservice={"context":"src/recommendationservice/"}'
           score-compose generate src/shippingservice/score.yaml --build='shippingservice={"context":"src/shippingservice/"}'
+          score-compose generate src/shoppingassistantservice/score.yaml --build='shoppingassistantservice={"context":"src/shoppingassistantservice/"}'
       - name: docker compose up
         run: |
           docker compose up --build -d --remove-orphans
       - name: docker ps
         run: |
+          sleep 5
           docker ps
       - name: curl frontend
         run: |
+          sleep 5
           curl $(score-compose resources get-outputs dns.default#frontend.dns --format '{{ .host }}:8080')
