@@ -17,8 +17,7 @@ FROM --platform=$BUILDPLATFORM python:3.12.8-slim@sha256:123be5684f39d8476e64f47
 FROM base AS builder
 
 RUN apt-get -qq update \
-    && apt-get install -y --no-install-recommends \
-        wget g++ \
+    && apt-get install -y --no-install-recommends g++ \
     && rm -rf /var/lib/apt/lists/*
 
 # get packages
