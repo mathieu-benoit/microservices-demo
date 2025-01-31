@@ -26,3 +26,5 @@ obj/
 pkg/
 release/wi-kubernetes-manifests.yaml
 vendor/
+.score-compose/
+compose.yaml

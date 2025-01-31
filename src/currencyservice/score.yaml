@@ -1,0 +1,21 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: currencyservice
+containers:
+  currencyservice:
+    image: .
+    variables:
+      DISABLE_PROFILER: "1"
+      PORT: "7000"
+    resources:
+      limits:
+        memory: "90Mi"
+        cpu: "140m"
+      requests:
+        memory: "70Mi"
+        cpu: "120m"
+service:
+  ports:
+    grpc:
+      port: 7000
+      targetPort: 7000

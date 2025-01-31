@@ -1,0 +1,19 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: loadgenerator
+containers:
+  loadgenerator:
+    image: .
+    variables:
+      FRONTEND_ADDR: "${resources.frontend.name}:80"
+      USERS: "10"
+    resources:
+      limits:
+        memory: "220Mi"
+        cpu: "100m"
+      requests:
+        memory: "200Mi"
+        cpu: "80m"
+resources:
+  frontend:
+    type: service
