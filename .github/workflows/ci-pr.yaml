@@ -32,28 +32,28 @@ jobs:
     strategy:
       matrix:
         image:
-          - name: ad
-            source-dir: src/adservice
-          - name: cart
-            source-dir: src/cartservice/src
-          - name: checkout
-            source-dir: src/checkoutservice
+          #- name: ad
+          #  source-dir: src/adservice
+          #- name: cart
+          #  source-dir: src/cartservice/src
+          #- name: checkout
+          #  source-dir: src/checkoutservice
           - name: currency
             source-dir: src/currencyservice
-          - name: email
-            source-dir: src/emailservice
-          - name: frontend
-            source-dir: src/frontend
-          - name: loadgenerator
-            source-dir: src/loadgenerator
-          - name: payment
-            source-dir: src/paymentservice
-          - name: productcatalog
-            source-dir: src/productcatalogservice
-          - name: recommendation
-            source-dir: src/recommendationservice
-          - name: shipping
-            source-dir: src/shippingservice
+          #- name: email
+          #  source-dir: src/emailservice
+          #- name: frontend
+          #  source-dir: src/frontend
+          #- name: loadgenerator
+          #  source-dir: src/loadgenerator
+          #- name: payment
+          #  source-dir: src/paymentservice
+          #- name: productcatalog
+          #  source-dir: src/productcatalogservice
+          #- name: recommendation
+          #  source-dir: src/recommendationservice
+          #- name: shipping
+          #  source-dir: src/shippingservice
     steps:
       - name: checkout code in PR branch
         uses: actions/checkout@v6.0.1
@@ -112,5 +112,6 @@ jobs:
           image: local://${{ matrix.image.name }}:pr-${{ github.event.number }}
           to: local://${{ matrix.image.name }}:main
           write-comment: true
+          keep-previous-comments: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
         
