@@ -126,4 +126,5 @@ jobs:
           write-comment: true
           keep-previous-comments: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          organization: ${{ secrets.DOCKER_ORG }}
         
