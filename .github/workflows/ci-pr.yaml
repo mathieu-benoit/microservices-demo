@@ -28,8 +28,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: read
-      id-token: write
-      packages: write
+      pull-requests: write
     strategy:
       matrix:
         image:
