@@ -54,8 +54,8 @@ compose.yaml: src/adservice/score.yaml src/cartservice/score.yaml src/checkoutse
 ## Generate a compose.yaml file from the score specs and launch it.
 .PHONY: compose-up
 compose-up: compose.yaml
-	docker compose up --build -d --remove-orphans
-	sleep 5
+	docker compose up --build -d --remove-orphans --wait
+	sleep 2
 
 ## Generate a compose.yaml file from the score spec, launch it and test (curl) the exposed container.
 .PHONY: compose-test
