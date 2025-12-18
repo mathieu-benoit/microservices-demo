@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6
       - name: install score-compose
         uses: score-spec/setup-score@v3
         with:
@@ -21,4 +21,90 @@ jobs:
       - name: make compose-test
         run: |
           make compose-test
+  scan-and-compare:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        image:
+          - name: ad
+            source-dir: src/adservice
+          - name: cart
+            source-dir: src/cartservice/src
+          - name: checkout
+            source-dir: src/checkoutservice
+          - name: currency
+            source-dir: src/currencyservice
+          - name: email
+            source-dir: src/emailservice
+          - name: frontend
+            source-dir: src/frontend
+          - name: loadgenerator
+            source-dir: src/loadgenerator
+          - name: payment
+            source-dir: src/paymentservice
+          - name: productcatalog
+            source-dir: src/productcatalogservice
+          - name: recommendation
+            source-dir: src/recommendationservice
+          - name: shipping
+            source-dir: src/shippingservice
+    steps:
+      - name: checkout code in PR branch
+        uses: actions/checkout@v6.0.1
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
+        with:
+          daemon-config: |
+            {
+              "debug": true,
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
+      - name: docker login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PAT }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build container image on PR branch
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.image.source-dir }}
+          push: false
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=max
+          sbom: true
+          tags: ${{ matrix.image.name }}:pr-${{ github.event.number }}
+      - name: checkout code in main branch
+        uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Build container image from main branch
+        uses: docker/build-push-action@v6
+        with:
+          context: app/
+          push: false
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=max
+          sbom: true
+          tags: ${{ matrix.image.name }}:main
+      - name: docker images
+        run: |
+          docker images
+      - name: Docker Scout
+        id: docker-scout
+        uses: docker/scout-action@v1
+        with:
+          command: compare
+          image: local://${{ matrix.image.name }}:pr-${{ github.event.number }}
+          to: local://${{ matrix.image.name }}:main
+          write-comment: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
         
