@@ -20,6 +20,12 @@ jobs:
       - name: make compose.yaml
         run: |
           make compose.yaml
+      - name: docker login dhi.io
+        uses: docker/login-action@v3
+        with:
+          registry: dhi.io
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_OAT }}
       - name: make compose-test
         run: |
           make compose-test
@@ -67,13 +73,13 @@ jobs:
                 "containerd-snapshotter": true
               }
             }
-      - name: docker login
+      - name: docker login docker.io
         uses: docker/login-action@v3
         with:
           registry: docker.io
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_OAT }}
-      - name: docker login
+      - name: docker login dhi.io
         uses: docker/login-action@v3
         with:
           registry: dhi.io
