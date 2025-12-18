@@ -6,6 +6,8 @@ on:
 jobs:
   make-compose-test:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     steps:
       - name: checkout code
         uses: actions/checkout@v6
@@ -24,6 +26,10 @@ jobs:
   scan-and-compare:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
     strategy:
       matrix:
         image:
