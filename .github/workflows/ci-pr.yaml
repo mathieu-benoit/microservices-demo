@@ -42,8 +42,8 @@ jobs:
           #  source-dir: src/adservice
           #- name: cart
           #  source-dir: src/cartservice/src
-          #- name: checkout
-          #  source-dir: src/checkoutservice
+          - name: checkout
+            source-dir: src/checkoutservice
           - name: currency
             source-dir: src/currencyservice
           #- name: email
