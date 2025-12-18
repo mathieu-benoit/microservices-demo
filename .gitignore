@@ -26,3 +26,9 @@ obj/
 pkg/
 release/wi-kubernetes-manifests.yaml
 vendor/
+.score-compose/state.yaml
+.score-compose/Z32h9kJkLyQ.taVWXqAIhYSIsDvUDDFf-Q.provisioners.yaml
+.score-compose/zz-default.provisioners.yaml
+.score-compose/mounts/redis-Jk0TAP/redis.conf
+.score-compose/mounts/routing-jxxvxY/nginx.conf
+compose.yaml

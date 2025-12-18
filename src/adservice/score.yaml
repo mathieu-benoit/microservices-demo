@@ -1,0 +1,22 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: ad
+  annotations:
+    tags: "java,backend,grpc"
+containers:
+  ad:
+    image: .
+    variables:
+      PORT: "9555"
+    resources:
+      limits:
+        memory: "150Mi"
+        cpu: "280m"
+      requests:
+        memory: "120Mi"
+        cpu: "250m"
+service:
+  ports:
+    grpc:
+      port: 9555
+      targetPort: 9555

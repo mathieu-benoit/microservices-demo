@@ -1,0 +1,74 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: frontend
+  annotations:
+    tags: "golang,html,css,ui,http,website"
+containers:
+  frontend:
+    image: .
+    livenessProbe:
+      httpGet:
+        path: /_healthz
+        port: 8080
+        httpHeaders:
+        - name: Cookie
+          value: shop_session-id=x-liveness-probe
+    readinessProbe:
+      httpGet:
+        path: /_healthz
+        port: 8080
+        httpHeaders:
+        - name: Cookie
+          value: shop_session-id=x-readiness-probe
+    variables:
+      AD_SERVICE_ADDR: "${resources.ad.name}:9555"
+      CART_SERVICE_ADDR: "${resources.cart.name}:7070"
+      CHECKOUT_SERVICE_ADDR: "${resources.checkout.name}:5050"
+      CURRENCY_SERVICE_ADDR: "${resources.currency.name}:7000"
+      ENABLE_PROFILER: "0"
+      PAYMENT_SERVICE_ADDR: "${resources.payment.name}:50051"
+      PORT: "8080"
+      PRODUCT_CATALOG_SERVICE_ADDR: "${resources.productcatalog.name}:3550"
+      RECOMMENDATION_SERVICE_ADDR: "${resources.recommendation.name}:8080"
+      SHIPPING_SERVICE_ADDR: "${resources.shipping.name}:50051"
+      SHOPPING_ASSISTANT_SERVICE_ADDR: "not-used-yet:8080"
+      CYMBAL_BRANDING: "false"
+      FRONTEND_MESSAGE: ""
+      ENABLE_ASSISTANT: "false"
+    resources:
+      limits:
+        memory: "50Mi"
+        cpu: "50m"
+      requests:
+        memory: "30Mi"
+        cpu: "30m"
+resources:
+  ad:
+    type: service
+  cart:
+    type: service
+  checkout:
+    type: service
+  currency:
+    type: service
+  dns:
+    type: dns
+  route:
+    type: route
+    params:
+      host: ${resources.dns.host}
+      path: /
+      port: 8080
+  payment:
+    type: service
+  productcatalog:
+    type: service
+  recommendation:
+    type: service
+  shipping:
+    type: service
+service:
+  ports:
+    http:
+      port: 8080
+      targetPort: 8080
