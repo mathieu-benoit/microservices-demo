@@ -128,3 +128,11 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           organization: ${{ secrets.DOCKER_ORG }}
           ignore-unchanged: true
+      - name: Scan image before
+        uses: anchore/scan-action@v6
+        with:
+          image: "${{ matrix.image.name }}:main"
+      - name: Scan image after
+        uses: anchore/scan-action@v6
+        with:
+          image: "${{ matrix.image.name }}:pr-${{ github.event.number }}"
