@@ -14,8 +14,8 @@
 
 FROM --platform=$BUILDPLATFORM dhi.io/python:3.12.12-alpine3.22-dev AS builder
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 RUN apk update \
     && apk add --no-cache g++ linux-headers \
@@ -27,8 +27,9 @@ RUN pip install -r requirements.txt --target /app
 
 FROM dhi.io/python:3.12.12-alpine3.22
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT="8080"
 
 # get packages
 WORKDIR /recommendationservice
@@ -39,8 +40,6 @@ COPY --from=builder /app /app
 # Add the application
 COPY . /app
 
-# set listen port
-ENV PORT="8080"
 EXPOSE 8080
 
 ENTRYPOINT ["python", "/app/recommendation_server.py"]
