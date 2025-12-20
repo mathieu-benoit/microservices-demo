@@ -27,7 +27,7 @@ COPY package*.json ./
 
 RUN npm install --only=production
 
-FROM dhi.io/node:22.21.1-alpine3.22
+FROM dhi.io/node:24.12.0-alpine3.22
 
 WORKDIR /usr/src/app
 
