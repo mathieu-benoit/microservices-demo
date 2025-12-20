@@ -97,7 +97,7 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: mode=max
           sbom: true
-          tags: ${{ matrix.image.name }}:pr-${{ github.event.number }}
+          tags: localbuild/${{ matrix.image.name }}:pr-${{ github.event.number }}
       - name: checkout code in main branch
         uses: actions/checkout@v6
         with:
@@ -112,7 +112,7 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: mode=max
           sbom: true
-          tags: ${{ matrix.image.name }}:main
+          tags: localbuild/${{ matrix.image.name }}:main
       - name: docker images
         run: |
           docker images
@@ -121,8 +121,8 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: compare
-          image: local://${{ matrix.image.name }}:pr-${{ github.event.number }}
-          to: local://${{ matrix.image.name }}:main
+          image: local://localbuild/${{ matrix.image.name }}:pr-${{ github.event.number }}
+          to: local://localbuild/${{ matrix.image.name }}:main
           write-comment: true
           keep-previous-comments: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -131,8 +131,8 @@ jobs:
       - name: Scan image before
         uses: anchore/scan-action@v6
         with:
-          image: "${{ matrix.image.name }}:main"
+          image: "localbuild/${{ matrix.image.name }}:main"
       - name: Scan image after
         uses: anchore/scan-action@v6
         with:
-          image: "${{ matrix.image.name }}:pr-${{ github.event.number }}"
+          image: "localbuild/${{ matrix.image.name }}:pr-${{ github.event.number }}"
