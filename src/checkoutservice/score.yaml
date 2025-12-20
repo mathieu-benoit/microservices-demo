@@ -1,0 +1,41 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: checkout
+  annotations:
+    tags: "golang,backend,grpc"
+containers:
+  checkout:
+    image: .
+    variables:
+      CART_SERVICE_ADDR: "${resources.cart.name}:7070"
+      CURRENCY_SERVICE_ADDR: "${resources.currency.name}:7000"
+      EMAIL_SERVICE_ADDR: "${resources.email.name}:5000"
+      PAYMENT_SERVICE_ADDR: "${resources.payment.name}:50051"
+      PORT: "5050"
+      PRODUCT_CATALOG_SERVICE_ADDR: "${resources.productcatalog.name}:3550"
+      SHIPPING_SERVICE_ADDR: "${resources.shipping.name}:50051"
+    resources:
+      limits:
+        memory: "80Mi"
+        cpu: "60m"
+      requests:
+        memory: "60Mi"
+        cpu: "40m"
+resources:
+  cart:
+    type: service
+  currency:
+    type: service
+  email:
+    type: service
+  payment:
+    type: service
+  productcatalog:
+    type: service
+  shipping:
+    type: service
+service:
+  ports:
+    grpc:
+      port: 5050
+      targetPort: 5050

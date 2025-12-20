@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM --platform=$BUILDPLATFORM python:3.12.12-alpine@sha256:d82291d418d5c47f267708393e40599ae836f2260b0519dd38670e9d281657f5 AS base
+FROM --platform=$BUILDPLATFORM dhi.io/python:3.12.12-alpine3.22-dev AS builder
 
-FROM base AS builder
-
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 RUN apk update \
     && apk add --no-cache g++ linux-headers \
@@ -25,28 +23,23 @@ RUN apk update \
 
 # get packages
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --target /app
 
-FROM base
+FROM dhi.io/python:3.12.12-alpine3.22
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-RUN apk update \
-    && apk add --no-cache libstdc++ \
-    && rm -rf /var/cache/apk/*
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT="8080"
 
 # get packages
 WORKDIR /recommendationservice
 
 # Grab packages from builder
-COPY --from=builder /usr/local/lib/python3.12/ /usr/local/lib/python3.12/
+COPY --from=builder /app /app
 
 # Add the application
-COPY . .
+COPY . /app
 
-# set listen port
-ENV PORT="8080"
 EXPOSE 8080
 
-ENTRYPOINT ["python", "recommendation_server.py"]
+ENTRYPOINT ["python", "/app/recommendation_server.py"]
